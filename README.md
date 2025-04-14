@@ -1,1 +1,148 @@
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { FaSmileBeam, FaCat, FaSun, FaRocket } from "react-icons/fa";
+
+const quizData = [
+  {
+    question: "What color is the sky?",
+    options: ["Blue", "Green", "Red", "Yellow"],
+    answer: "Blue",
+  },
+  {
+    question: "Which one is an animal?",
+    options: ["Apple", "Dog", "Car", "Chair"],
+    answer: "Dog",
+  },
+  {
+    question: "How many legs does a spider have?",
+    options: ["4", "6", "8", "10"],
+    answer: "8",
+  },
+  {
+    question: "What do you drink when you are thirsty?",
+    options: ["Water", "Pencil", "Shoe", "Phone"],
+    answer: "Water",
+  },
+  {
+    question: "Which one is used to write?",
+    options: ["Pen", "Fish", "Spoon", "Ball"],
+    answer: "Pen",
+  },
+  {
+    question: "What shape has 3 sides?",
+    options: ["Square", "Circle", "Triangle", "Star"],
+    answer: "Triangle",
+  },
+  {
+    question: "Which one is hot?",
+    options: ["Sun", "Ice", "Snow", "Rain"],
+    answer: "Sun",
+  },
+];
+
+export default function KidsEnglishLearning() {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+    if (option === quizData[currentQuestion].answer) {
+      setScore(score + 1);
+    }
+    setTimeout(() => {
+      if (currentQuestion + 1 < quizData.length) {
+        setCurrentQuestion(currentQuestion + 1);
+        setSelectedOption(null);
+      } else {
+        setShowResult(true);
+      }
+    }, 800);
+  };
+
+  const resetQuiz = () => {
+    setCurrentQuestion(0);
+    setSelectedOption(null);
+    setScore(0);
+    setShowResult(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-yellow-100 p-6 flex flex-col items-center justify-center">
+      <motion.div
+        className="text-4xl mb-4 text-pink-600 flex items-center gap-2"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <FaSmileBeam className="text-pink-500 animate-bounce" />
+        <h1 className="font-bold">Fun English Quiz!</h1>
+        <FaRocket className="text-blue-500 animate-spin-slow" />
+      </motion.div>
+
+      {showResult ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <Card className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md text-center">
+            <CardContent>
+              <motion.div
+                className="text-3xl mb-4 text-green-600 flex justify-center animate-bounce"
+              >
+                🎉🎉🎉
+              </motion.div>
+              <h2 className="text-2xl font-bold text-green-600 mb-4">
+                You scored {score} out of {quizData.length}!
+              </h2>
+              <Button
+                onClick={resetQuiz}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl"
+              >
+                Try Again
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
+            <CardContent>
+              <h2 className="text-xl font-bold text-blue-600 mb-4">
+                {quizData[currentQuestion].question}
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                {quizData[currentQuestion].options.map((option, index) => (
+                  <Button
+                    key={index}
+                    onClick={() => handleOptionClick(option)}
+                    className={`rounded-xl py-2 ${
+                      selectedOption === option
+                        ? option === quizData[currentQuestion].answer
+                          ? "bg-green-400 text-white"
+                          : "bg-red-400 text-white"
+                        : "bg-blue-200 hover:bg-blue-300"
+                    }`}
+                  >
+                    {option}
+                  </Button>
+                ))}
+              </div>
+              <div className="text-center mt-4 animate-pulse text-yellow-500">
+                <FaCat className="inline-block mr-2" />Keep going! You're doing great!
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+    </div>
+  );
+}
 # fun-English-for-kids-
